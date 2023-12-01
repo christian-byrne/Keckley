@@ -159,6 +159,17 @@ class Project:
             if verbose:
                 print(f"{completed_process.stdout}")
 
+    def stitch_output_frames(self, fps=10, verbose=False, raw=False):
+        """Stitch the output frames together into a video."""
+        system_call = f"ffmpeg -r {fps} -i {self.project_path}/frames/output/{'raw' if raw else 'upscaled'}/%d.png -vcodec libx264 -crf 25 -pix_fmt yuv420p {self.project_path}/output.mp4"
+        self.log.write_to_log(f"System call: {system_call}")
+        if verbose:
+            print(f"System call: {system_call}")
+        completed_process = synchronous_shell_command(system_call)
+        self.log.write_to_log(f"Process stdout: {completed_process.stdout}")
+        if verbose:
+            print(f"{completed_process.stdout}")
+
 
 def synchronous_shell_command(command):
     """Execute a shell command synchronously."""
@@ -190,7 +201,9 @@ if __name__ == "__main__":
     project_name = getUserInput("Enter the project name: ")
     project = Project(root, project_name)
 
-    project.extract_input_frames(fps=config.get("inputFPS"), verbose=config.get("verbose"))
+    project.extract_input_frames(
+        fps=config.get("inputFPS"), verbose=config.get("verbose")
+    )
 
     # TODO Upscale input frames
     # TODO (potential) auto remove background before proceeding from this step, then add background back to final output image
