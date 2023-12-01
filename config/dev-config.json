@@ -1,0 +1,16 @@
+{
+  "verbose" : true,
+  "inputFPS" : 2,
+  "outputFPS" : 3,
+  "blending options": {
+    "tblend": {
+      "blend": "over",
+      "opacity": 1
+    }
+  },
+  "upscale" : {
+    "original" : true,
+    "mask" : true,
+    "output": true
+  }
+}
