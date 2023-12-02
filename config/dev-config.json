@@ -3,8 +3,8 @@
   "outputFPS" : 3,
   "motion weight" : 0.001,
   "color weight" : 0.98,
-  "motion threshold" : -0.2,
-  "color threshold" : -0.3,
+  "motion threshold" : -0.3,
+  "color threshold" : -0.5,
   "blending options": {
     "tblend": {
       "blend": "over",

@@ -58,7 +58,7 @@ class Frames:
             print("motion threshold from config:" + str(motion_threshold))
             print("color threshold from config:" + str(color_threshold))
             print("difference properties:")
-            print(self.get_difference_properties)
+            print(self.get_difference_properties())
             print("keyframe details:")
             print(self.get_keyframe_details())
             print("keyframe visualization:")
@@ -80,7 +80,7 @@ class Frames:
             "keyframe original indices:",
             self.get_keyframe_original_indices(),
             "difference properties:",
-            self.get_difference_properties,
+            self.get_difference_properties(),
             "keyframe details:",
             self.get_keyframe_details(),
             "keyframe visualization:",

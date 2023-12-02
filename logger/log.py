@@ -41,6 +41,6 @@ class Log:
             log_file.write("\n\n" + self.minute_time() + "\n")
             if isinstance(message, list):
                 for line in message:
-                    log_file.write(line)
+                    log_file.write("\n" + str(line) + "\n")
             else:
-                log_file.write(message)
+                log_file.write("\n" + str(message) + "\n")
