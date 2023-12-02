@@ -213,3 +213,5 @@ if __name__ == "__main__":
     # TODO Generate output video with blending and video filter options
     # TODO upscale video with frame interpolation and video enhancement AI
     # TODO (potential) make comparison grid between original and output video
+
+    # TODO interframe communication 
