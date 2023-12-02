@@ -180,9 +180,13 @@ class Frames:
                 self.keyframes.append(frame)
             else:
                 frame["keyframe"] = False
-                self.keyframes[-1]["keyframe_children_indices"].append(
-                    frame["frame_index_original"]
-                )
+                # TODO: handle situation where there are no keyframes because the first keyframe is not the first frame
+                try:
+                    self.keyframes[-1]["keyframe_children_indices"].append(
+                        frame["frame_index_original"]
+                    )
+                except IndexError:
+                    print("Frame " + str(frame["frame_index_original"]) + " cannot be assigned a parent keyframe because there are no keyframes yet (i.e., this frame occurs before the first keyframe).")
 
     def calculate_color_difference(self, frame1, frame2):
         hist1 = cv2.calcHist(

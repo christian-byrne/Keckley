@@ -1,3 +1,4 @@
+tests/*.in
 projects/*
 *.mp4
 Real-ESRGAN/*
