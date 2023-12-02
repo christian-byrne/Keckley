@@ -1,6 +1,5 @@
 {
   "verbose" : true,
-  "inputFPS" : 15,
   "outputFPS" : 3,
   "blending options": {
     "tblend": {
