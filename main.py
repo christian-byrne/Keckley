@@ -26,7 +26,15 @@ if __name__ == "__main__":
     config = Config(root, DEV)
     project = Project(root, project_name, synchronous_shell_command)
 
-    frames = Frames(project.masked_video_path)
+    frames = Frames(
+        mask_video=project.masked_video_path,
+        log=project.log,
+        motion_weight=config.config["motion weight"],
+        color_weight=config.config["color weight"],
+        motion_threshold=config.config["motion threshold"],
+        color_threshold=config.config["color threshold"],
+        verbose=config.config["verbose"],
+    )
     if project.new_project:
         project.extract_input_frames(
             fps=frames.get_fps(), verbose=config.get("verbose")
@@ -56,7 +64,3 @@ if __name__ == "__main__":
         print(
             len(os.listdir(os.path.join(project.project_path, "frames/original/raw")))
         )
-
-    # project.extract_input_frames(
-    #     fps=config.get("inputFPS"), verbose=config.get("verbose")
-    # )

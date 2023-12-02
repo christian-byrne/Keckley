@@ -29,16 +29,19 @@ class Frames:
     def __init__(
         self,
         mask_video,
+        log,
         motion_weight=0.001,
         color_weight=1.0,
         motion_threshold=0.1,
         color_threshold=0.1,
+        verbose=False
     ):
         self.mask_video = mask_video
         self.motion_weight = motion_weight
         self.color_weight = color_weight
         self.motion_threshold = motion_threshold
         self.color_threshold = color_threshold
+        self.verbose = verbose
         self.frames = []  # list of frame objects
         self.keyframes = []  # list of pointers to frame objects in self.frames
         self.all_color_diffs = []
@@ -48,6 +51,46 @@ class Frames:
         self.set_difference_measures()
         self.set_difference_thresholds()
         self.set_keyframes()
+
+        if self.verbose:
+            print("motion weight from config:" + str(motion_weight))
+            print("color weight from config:" + str(color_weight))
+            print("motion threshold from config:" + str(motion_threshold))
+            print("color threshold from config:" + str(color_threshold))
+            print("difference properties:")
+            print(self.get_difference_properties)
+            print("keyframe details:")
+            print(self.get_keyframe_details())
+            print("keyframe visualization:")
+            print(self.get_keyframe_vizualization())
+
+        log.write_to_log([
+            "fps:",
+            self.get_fps(),
+            "frame count:",
+            self.get_frame_count(),
+            "motion weight from config:",
+            motion_weight,
+            "color weight from config:",
+            color_weight,
+            "motion threshold from config:",
+            motion_threshold,
+            "color threshold from config:",
+            color_threshold,
+            "keyframe original indices:",
+            self.get_keyframe_original_indices(),
+            "difference properties:",
+            self.get_difference_properties,
+            "keyframe details:",
+            self.get_keyframe_details(),
+            "keyframe visualization:",
+            self.get_keyframe_vizualization(),
+            "frame objects:",
+            self.get_frame_objects(),
+            "keyframe objects:",
+            self.get_keyframe_objects(),
+        ])
+            
 
     def get_fps(self):
         return self.fps 

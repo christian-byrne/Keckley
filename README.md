@@ -2,15 +2,6 @@
 
 Inpaint a video. For example, change an actor's age from old to young or change a person's clothes from lame to stylish -- without changing any other portion of the video. 
 
-
-ffmpeg -i mask.mp4 -filter_complex "[0:v]split=2[base][mask];[base][mask]alphamerge[transparent];[base]eq=100:100:255:255:255:255:white[white];[white][transparent]blend=all_mode='overlay'[blended];[blended][0:v]overlay" -c:a copy white-mask-test.mp4
-
-ffmpeg -i mask.mp4 -filter_complex "[0:v]format=rgba,colorchannelmixer=aa=1[fg];[fg]geq=r='r(X,Y)':a='if(eq(alpha(X,Y),255),255,0)',split=2[fg][alpha];[alpha]eq=255:255[alpha];[fg][alpha]alphamerge[blended];[blended][0:v]overlay" -c:a copy output_video.mp4
-
-ffmpeg -i mask.mp4 -vf "format=rgba,geq='r=if(gt(alpha(X,Y),128),255,0):g=if(gt(alpha(X,Y),128),255,0):b=if(gt(alpha(X,Y),128),255,0):a=if(gt(alpha(X,Y),250),255,0)'" -c:a copy output_video_with_white.mp4
-
-ffprobe -v error -show_frames -select_streams v -of json mask.mp4 > video_frames_info.json
-
 ## Process
 
 
