@@ -4,7 +4,7 @@ import os.path
 
 
 class Project:
-    def __init__(self, root, project_name, shell_command_handler):
+    def __init__(self, root, project_name, shell_command_handler, raw=True):
         """Initialize the project object."""
         self.root = root
         self.project_name = project_name
@@ -27,16 +27,22 @@ class Project:
             while not os.path.exists(input_path_masked):
                 print("The masked video path does not exist.")
                 input_path_masked = input("Enter the path to the masked video: ")
-            input_path_masked_white = input("Enter the path to the masked white video: ")
+            input_path_masked_white = input(
+                "Enter the path to the masked white video: "
+            )
             while not os.path.exists(input_path_masked_white):
                 print("The masked white video path does not exist.")
-                input_path_masked_white = input("Enter the path to the masked white video: ")
+                input_path_masked_white = input(
+                    "Enter the path to the masked white video: "
+                )
 
             (
                 self.original_video_path,
                 self.masked_video_path,
                 self.masked_white_video_path,
-            ) = self.copy_video_to_project(input_path_original, input_path_masked, input_path_masked_white)
+            ) = self.copy_video_to_project(
+                input_path_original, input_path_masked, input_path_masked_white
+            )
         else:
             project_files = os.listdir(self.project_path)
             for file in project_files:
@@ -88,14 +94,24 @@ class Project:
         ret["name_no_ext"] = ".".join(os.path.basename(file_path).split(".")[:-1])
         ret["ext"] = os.path.basename(file_path).split(".")[-1]
         return ret
-        
-    def copy_video_to_project(self, original_video_path, masked_video_path, masked_white_video_path):
+
+    def copy_video_to_project(
+        self, original_video_path, masked_video_path, masked_white_video_path
+    ):
         """Copy the original and masked videos to the project directory."""
-        original, mask, white_mask = self.path_parts(original_video_path), self.path_parts(masked_video_path), self.path_parts(masked_white_video_path)
-        new_original_video_path = f"{self.project_path}/{original['name_no_ext']}-original.{original['ext']}"
-        new_masked_video_path = f"{self.project_path}/{mask['name_no_ext']}-masked_color.{mask['ext']}"
+        original, mask, white_mask = (
+            self.path_parts(original_video_path),
+            self.path_parts(masked_video_path),
+            self.path_parts(masked_white_video_path),
+        )
+        new_original_video_path = (
+            f"{self.project_path}/{original['name_no_ext']}-original.{original['ext']}"
+        )
+        new_masked_video_path = (
+            f"{self.project_path}/{mask['name_no_ext']}-masked_color.{mask['ext']}"
+        )
         new_white_masked_video_path = f"{self.project_path}/{white_mask['name_no_ext']}-masked_white.{white_mask['ext']}"
-        
+
         # TODO: use system call handler instead of os.system for other OS
         os.system(f"cp {original_video_path} {new_original_video_path}")
         os.system(f"cp {masked_video_path} {new_masked_video_path}")
@@ -132,6 +148,17 @@ class Project:
             self.log.write_to_log(f"Process stdout: {completed_process.stdout}")
             if verbose:
                 print(f"{completed_process.stdout}")
+
+    def store_keyframes(self, keyframe_indices, raw=True):
+        raw = "raw" if raw else "upscaled"
+        for i in range(len(os.listdir(f"{self.project_path}/frames/original/{raw}"))):
+            if i in keyframe_indices:
+                os.system(
+                    f"cp {self.project_path}/frames/original/{raw}/{i}.png {self.project_path}/keyframes/original/{i}.png"
+                )
+                os.system(
+                    f"cp {self.project_path}/frames/masked-white/raw/{i}.png {self.project_path}/keyframes/masked-white/{i}.png"
+                )
 
     def stitch_output_frames(self, fps=30, verbose=False, raw=False):
         """Stitch the output frames together into a video."""

@@ -5,6 +5,7 @@ import subprocess
 from frame_analysis.keyframe_extractor import Frames
 from project_handler.project import Project
 from config_utils.config import Config
+from composite_blend.blender import Blender
 
 
 def synchronous_shell_command(command):
@@ -30,6 +31,20 @@ if __name__ == "__main__":
         project.extract_input_frames(
             fps=frames.get_fps(), verbose=config.get("verbose")
         )
+
+    keyframe_indices = frames.get_keyframe_original_indices()
+    project.store_keyframes(keyframe_indices, raw=True)
+
+    # !! DO SD here
+
+    if input("Do you want to blend the frames? (y/n): ") == "y":
+        blender = Blender(
+            frames=frames.get_frame_objects(),
+            keyframes=frames.get_keyframe_objects(),
+            composites_path=f"{project.project_path}/keyframes/composites",
+            outputs_path=f"{project.project_path}/frames/blended-with-composites/raw",
+        )
+        blender.blend()
 
     if DEV:
         print("Is this a new project?")

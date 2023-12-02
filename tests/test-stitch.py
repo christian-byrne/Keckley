@@ -1,11 +1,10 @@
 import subprocess
 
 
-def stitch_output_frames(self, fps=10, verbose=True):
+def stitch_output_frames(fps=10, verbose=True):
     """Stitch the output frames together into a video."""
     project_path = input("Enter the path to the image directory: ")
-    system_call = f"ffmpeg -r {fps} -i {project_path}/%d.png -vcodec libx264 -crf 25 -pix_fmt yuv420p {project_path}/output.mp4"
-    self.log.write_to_log(f"System call: {system_call}")
+    system_call = f"ffmpeg -r {fps} -i {project_path}/%d.png -vcodec libx264 -crf 10 -pix_fmt yuv420p test_stitch-output.mp4"
     if verbose:
         print(f"System call: {system_call}")
     completed_process = synchronous_shell_command(system_call)
@@ -21,3 +20,7 @@ def synchronous_shell_command(command):
     except subprocess.CalledProcessError as error:
         print(error)
     return completed_process
+
+
+if __name__ == "__main__":
+    stitch_output_frames(30)
