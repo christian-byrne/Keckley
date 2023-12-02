@@ -27,12 +27,16 @@ class Project:
             while not os.path.exists(input_path_masked):
                 print("The masked video path does not exist.")
                 input_path_masked = input("Enter the path to the masked video: ")
+            input_path_masked_white = input("Enter the path to the masked white video: ")
+            while not os.path.exists(input_path_masked_white):
+                print("The masked white video path does not exist.")
+                input_path_masked_white = input("Enter the path to the masked white video: ")
 
             (
                 self.original_video_path,
                 self.masked_video_path,
                 self.masked_white_video_path,
-            ) = self.copy_video_to_project(input_path_original, input_path_masked)
+            ) = self.copy_video_to_project(input_path_original, input_path_masked, input_path_masked_white)
         else:
             project_files = os.listdir(self.project_path)
             for file in project_files:
@@ -53,50 +57,49 @@ class Project:
     def make_directories(self):
         """Create the project directories."""
         folders = [
-            f"",
-            f"/log",
-            f"/frames",
-            f"/frames/original",
-            f"/frames/masked",
-            f"/frames/masked-white",
-            f"/frames/output",
-            f"/frames/original/raw",
-            f"/frames/original/upscaled",
-            f"/frames/masked/raw",
-            f"/frames/masked/upscaled",
-            f"/frames/masked-white/raw",
-            f"/frames/masked-white/upscaled",
-            f"/frames/output/raw",
-            f"/frames/output/upscaled",
+            "",
+            "/log",
+            "/frames",
+            "/frames/original",
+            "/frames/original/raw",
+            "/frames/original/upscaled",
+            "/frames/masked",
+            "/frames/masked/raw",
+            "/frames/masked/upscaled",
+            "/frames/masked-white",
+            "/frames/masked-white/raw",
+            "/keyframes",
+            "/keyframes/original",
+            "/keyframes/masked-white",
+            "/keyframes/composites",
+            "/frames/blended-with-composites",
+            "/frames/blended-with-composites/raw",
+            "/frames/blended-with-composites/upscaled",
         ]
         for folder in folders:
             folder = self.project_path + folder
             if not os.path.exists(folder):
                 os.mkdir(folder)
 
-    def copy_video_to_project(self, original_video_path, masked_video_path):
+    def path_parts(self, file_path):
+        """Return path parts."""
+        ret = {}
+        ret["full_path"] = file_path
+        ret["name_no_ext"] = ".".join(os.path.basename(file_path).split(".")[:-1])
+        ret["ext"] = os.path.basename(file_path).split(".")[-1]
+        return ret
+        
+    def copy_video_to_project(self, original_video_path, masked_video_path, masked_white_video_path):
         """Copy the original and masked videos to the project directory."""
-        original_without_ext = ".".join(
-            os.path.basename(original_video_path).split(".")[:-1]
-        )
-        original_ext = os.path.basename(original_video_path).split(".")[-1]
-        masked_without_ext = ".".join(
-            os.path.basename(masked_video_path).split(".")[:-1]
-        )
-        masked_ext = os.path.basename(masked_video_path).split(".")[-1]
-        new_original_video_path = (
-            f"{self.project_path}/{original_without_ext}-original.{original_ext}"
-        )
-        new_masked_video_path = (
-            f"{self.project_path}/{masked_without_ext}-masked_color.{masked_ext}"
-        )
-        new_white_masked_video_path = (
-            f"{self.project_path}/{masked_without_ext}-masked_white.{masked_ext}"
-        )
+        original, mask, white_mask = self.path_parts(original_video_path), self.path_parts(masked_video_path), self.path_parts(masked_white_video_path)
+        new_original_video_path = f"{self.project_path}/{original['name_no_ext']}-original.{original['ext']}"
+        new_masked_video_path = f"{self.project_path}/{mask['name_no_ext']}-masked_color.{mask['ext']}"
+        new_white_masked_video_path = f"{self.project_path}/{white_mask['name_no_ext']}-masked_white.{white_mask['ext']}"
+        
         # TODO: use system call handler instead of os.system for other OS
         os.system(f"cp {original_video_path} {new_original_video_path}")
         os.system(f"cp {masked_video_path} {new_masked_video_path}")
-        os.system(f"cp {masked_video_path} {new_white_masked_video_path}")
+        os.system(f"cp {masked_white_video_path} {new_white_masked_video_path}")
         self.log.write_to_log(
             [
                 "Original video path: " + new_original_video_path + "\n",
@@ -114,11 +117,12 @@ class Project:
             new_white_masked_video_path,
         )
 
-    def extract_input_frames(self, fps=10, verbose=False):
+    def extract_input_frames(self, fps=30, verbose=False):
         """Extract the input frames from the original and masked videos."""
         system_calls = [
             f"ffmpeg -i {self.original_video_path} -vf fps={fps} {self.project_path}/frames/original/raw/%d.png",
             f"ffmpeg -i {self.masked_video_path} -vf fps={fps} {self.project_path}/frames/masked/raw/%d.png",
+            f"ffmpeg -i {self.masked_white_video_path} -vf fps={fps} {self.project_path}/frames/masked-white/raw/%d.png",
         ]
         for call in system_calls:
             self.log.write_to_log(f"System call: {call}")
@@ -129,7 +133,7 @@ class Project:
             if verbose:
                 print(f"{completed_process.stdout}")
 
-    def stitch_output_frames(self, fps=10, verbose=False, raw=False):
+    def stitch_output_frames(self, fps=30, verbose=False, raw=False):
         """Stitch the output frames together into a video."""
         system_call = f"ffmpeg -r {fps} -i {self.project_path}/frames/output/{'raw' if raw else 'upscaled'}/%d.png -vcodec libx264 -crf 25 -pix_fmt yuv420p {self.project_path}/output.mp4"
         self.log.write_to_log(f"System call: {system_call}")

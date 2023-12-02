@@ -3,11 +3,19 @@
 Inpaint a video. For example, change an actor's age from old to young or change a person's clothes from lame to stylish -- without changing any other portion of the video. 
 
 
+ffmpeg -i mask.mp4 -filter_complex "[0:v]split=2[base][mask];[base][mask]alphamerge[transparent];[base]eq=100:100:255:255:255:255:white[white];[white][transparent]blend=all_mode='overlay'[blended];[blended][0:v]overlay" -c:a copy white-mask-test.mp4
+
+ffmpeg -i mask.mp4 -filter_complex "[0:v]format=rgba,colorchannelmixer=aa=1[fg];[fg]geq=r='r(X,Y)':a='if(eq(alpha(X,Y),255),255,0)',split=2[fg][alpha];[alpha]eq=255:255[alpha];[fg][alpha]alphamerge[blended];[blended][0:v]overlay" -c:a copy output_video.mp4
+
+ffmpeg -i mask.mp4 -vf "format=rgba,geq='r=if(gt(alpha(X,Y),128),255,0):g=if(gt(alpha(X,Y),128),255,0):b=if(gt(alpha(X,Y),128),255,0):a=if(gt(alpha(X,Y),250),255,0)'" -c:a copy output_video_with_white.mp4
+
+ffprobe -v error -show_frames -select_streams v -of json mask.mp4 > video_frames_info.json
+
 ## Process
 
 
 ### Extract Frames
-- accept (1) a video and (2) the same video but masked for inpainting
+- accept (1) a video and (2) the same video but masked for inpainting (3) the masked version but all non-transparent masked regions are turned completely white
     - If not using auto-segmentation for mask generation, the easiest method is to use some automated motion tracking component of a video editing software
     - the second option is to create a transparency mask in an offline video editor like Premiere Pro then animate the mask's path by keyframe (in Premiere Pro, create the mask then slide the mouse wheel and change the mask's path as you go)
     - these methods are 10x faster than manually creating masks and make inpainting a video actually possible in a short amount of time
@@ -15,7 +23,7 @@ Inpaint a video. For example, change an actor's age from old to young or change 
 - optionally, based on config, extract every frame of video -> upscale based on config models, tiling, etc. -> re-construct video
 - optionally, frame interpolation on input video before mask is created/applied
 - extract and store every frame of both videos
-- make separate copies of masked-video frames and apply filter such that the inpainted area is turned completely white (the transparent area ouutside the mask is black)
+- If white-mask version is not supplied AND video format contains alpha (e.g.,12-bit codec + alpha channel - ProRes 4444 + alpha encoding), make separate copies of masked-video frames and apply filter such that the inpainted area is turned completely white (the transparent area ouutside the mask is black)
 
 ### Determine Keyframes
 - determine keyframes based on the frames of the masked video using algorithm with optional user preferences (use the masked video because differences in inpainted area are what's important)
