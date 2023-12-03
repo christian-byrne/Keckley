@@ -15,15 +15,15 @@
     "keyframes_original_alpha_white_out" : "$project_root$/keyframes/original/alpha-white_out",
     "keyframes_composite" : "$project_root$/keyframes/composite",
     "frames_composite_all_raw" : "$project_root$/frames/composite/all/raw",
-    "frames_output_alpha" : "$project_root$/frames/output/alpha",
+    "keyframes_output_alpha" : "$project_root$/keyframes/output/alpha",
     "frames_composite_all_upscaled" : "$project_root$/frames/composite/all/upscaled",
     "frames_composite_selected" : "$project_root$/frames/composite/selected"
   },
   "keyframe_determination" : {
-    "motion_weight" : 0.001,
-    "color_weight" : 0.001,
-    "motion_threshold" : -0.2,
-    "color_threshold" : -0.18
+    "motion_weight" : 0.01,
+    "color_weight" : 0.15,
+    "motion_threshold" : -0.6,
+    "color_threshold" : -0.85
   },
   "frame_blending": {
     "tblend": {

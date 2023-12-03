@@ -17,7 +17,7 @@ Inpaint a video. For example, change an actor's age from old to young or change 
 - If white-mask version is not supplied AND video format contains alpha (e.g.,12-bit codec + alpha channel - ProRes 4444 + alpha encoding), make separate copies of masked-video frames and apply filter such that the inpainted area is turned completely white (the transparent area ouutside the mask is black)
 
 ### Determine Keyframes
-- determine keyframes based on the frames of the masked video using algorithm with optional user preferences (use the masked video because differences in inpainted area are what's important)
+- determine keyframes based on the frames of the alpha video using algorithm with optional user preferences (use the alpha video because differences in inpainted area are what's important -- i.e., if the overall scene is changing a lot but the inpainted area is not, there's no reason to set a keyframe, because we are not changing anything outside of the inpainted area)
     - Default algorithm
         - calculates color difference and motion difference
         - frames that exceed average color difference and motion difference (plus or minus weights) are designated as keyframes
@@ -33,7 +33,7 @@ Inpaint a video. For example, change an actor's age from old to young or change 
 - get keyframes from (1) the original video and (2) the WHITE mask video
 - put these keyframe pairs put into separate folders
 
-### Inpaint Keyframes
+### Inpaint Keyframe Alpha Layers
 - run SD on the original-keyframe / WHITE-masked-keyframe pairs
     - specify in SD interface options to create composites only 
     - store composites in folder
@@ -44,8 +44,8 @@ Inpaint a video. For example, change an actor's age from old to young or change 
         - a few spare seconds of choppiness (frame drops) might be a better outcome than having a few keyframes with very jarring/disconnected inpainted sections
     - make multiple composite/keyframe blends for each keyframe and have selection process keyframe by keyframe where user selects with arrow keys which composite to use in the final blended output
 
-### Blend Composites with Keyframe Groups
-- blend composite with the keyframe groups (including keyframe itself) of the original video
+### Composite Inpainted Alpha Layers with Keyframe Groups
+- blend inpainted alpha layers with the keyframe groups (including keyframe itself) of the original video
     - blending parameters/mode determinatino algorithm
 - optionally, based on config, upscale the blended frames based on config's models, tiling, etc.
 
@@ -71,23 +71,19 @@ Inpaint a video. For example, change an actor's age from old to young or change 
 ### URGENT
 
 
-- changing naming from "composite" to "alpha channel" and "blended composite" to "composite"
-- each project should save a copy of the config used to create it, then if selecting an existing project, that config should be loaded 
+- the keyframe analysis should be with the LAST keyframe, not with the frame immediately prior to cur
+- in keyframe algorithm, set max keyframe group size and automatically set new keyframe if exceeding
 - set SD configs
     - ensure composite saving is on
 - auto start SD
-- select composites from output temp folder
-- delete output temp folder after user selection/discrimination
-- in keyframe algorithm, set max keyframe group size and automatically set new keyframe if exceeding
 
 
 ### LESS URGENT
 
 
-- folders and names should be saved/determined/selected by a singleton manager
-    - options should be based on config if new project
+- prepend CLIP interrogation
 - ID hashes
-- implement the handler for all system calls across classes
+- shutil over `cp` shell cmd
 
 ### OPTIONAL FEATURES
 
