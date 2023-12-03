@@ -78,6 +78,8 @@ Inpaint a video. For example, change an actor's age from old to young or change 
 - auto start SD
 - select composites from output temp folder
 - delete output temp folder after user selection/discrimination
+- in keyframe algorithm, set max keyframe group size and automatically set new keyframe if exceeding
+
 
 ### LESS URGENT
 

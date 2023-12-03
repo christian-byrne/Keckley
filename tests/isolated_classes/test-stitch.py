@@ -23,4 +23,4 @@ def synchronous_shell_command(command):
 
 
 if __name__ == "__main__":
-    stitch_output_frames(13)
+    stitch_output_frames(5)

@@ -1,0 +1,1 @@
+ffmpeg -i background.png -i alpha_channel.png -filter_complex "[0:v][1:v]alphamerge" -c:v png output_%03d.png

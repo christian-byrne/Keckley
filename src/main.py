@@ -101,19 +101,14 @@ if __name__ == "__main__":
             + str(
                 len(
                     os.listdir(
-                        os.path.join(project.project_path, "frames/original/raw")
+                        proj_config.get("directories")["frames_original_background_raw"]
                     )
                 )
             )
         )
-        
-    exit()
+
     if input("Do you want to blend the frames? (y/n): ") == "y":
         blender = Blender(
-            frames=frames.get_frame_objects(),
-            keyframes=frames.get_keyframe_objects(),
-            composites_path=f"{project.project_path}/keyframes/composites",
-            outputs_path=f"{project.project_path}/frames/blended-with-composites/raw",
+            proj_config, frames.get_frame_objects(), frames.get_keyframe_objects()
         )
         blender.blend()
-
