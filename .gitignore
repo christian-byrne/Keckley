@@ -1,10 +1,11 @@
-tests/*.in
-projects/*
+*aud*ce.in*
+tests/sample_videos/*
+*projects/*
+*/projects/*
 *.mp4
 Real-ESRGAN/*
 .vscode
 __pycache__
-*/*.mp4
 */.ipynb_checkpoints
 */__pycache__
 *.ipynb_checkpoints

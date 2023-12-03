@@ -68,6 +68,27 @@ Inpaint a video. For example, change an actor's age from old to young or change 
 
 ## TODO
 
+### URGENT
+
+
+- changing naming from "composite" to "alpha channel" and "blended composite" to "composite"
+- each project should save a copy of the config used to create it, then if selecting an existing project, that config should be loaded 
+- set SD configs
+    - ensure composite saving is on
+- auto start SD
+- select composites from output temp folder
+- delete output temp folder after user selection/discrimination
+
+### LESS URGENT
+
+
+- folders and names should be saved/determined/selected by a singleton manager
+    - options should be based on config if new project
+- ID hashes
+- implement the handler for all system calls across classes
+
+### OPTIONAL FEATURES
+
 - Automate segmentation / Mask creation process (using segmentation AI or using a user-defined block of the image) preceeding rest of process
 - interframe communication
 - OpenCV and FFmpeg are creating slightly different numbers of frames in their respective decoding processes. One solution may be to use the same frame-comparison tools already present in the code to find the correct "shift" to apply to the arrays such that they are matched, and then cut off the trailing/leading frames from the longer array (or just put them in the last/first keyframe groups respectively)

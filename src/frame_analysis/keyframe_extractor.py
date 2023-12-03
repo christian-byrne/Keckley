@@ -1,7 +1,7 @@
 import cv2
+from pprint import pformat
 
-
-class Frames:
+class KeyFrames:
     """
     This class analyzes a video file and determines the differences between each frame.
     It then determines the threshold for a keyframe based on the average difference
@@ -23,25 +23,12 @@ class Frames:
 
     The motion difference is weighted by the motion_weight parameter. The color
     difference is weighted by the color_weight parameter. The motion_weight and
-    color_weight parameters are used to adjust the importance of the motion difference. The default motion weight is 0.001 because the values for the motion difference are much larger than the values for the color difference. The default color weight is 1 because the values for the color difference are much smaller than the values for the motion difference. Adjustment of the motion_weight and color_weight parameters may be necessary for different videos but should take into account the default values and the relative values of the motion difference and the color difference.
+    color_weight parameters are used to adjust the importance of the motion difference.
     """
 
-    def __init__(
-        self,
-        mask_video,
-        log,
-        motion_weight=0.001,
-        color_weight=1.0,
-        motion_threshold=0.1,
-        color_threshold=0.1,
-        verbose=False
-    ):
-        self.mask_video = mask_video
-        self.motion_weight = motion_weight
-        self.color_weight = color_weight
-        self.motion_threshold = motion_threshold
-        self.color_threshold = color_threshold
-        self.verbose = verbose
+    def __init__(self, config, log):
+        self.config = config
+        self.log = log
         self.frames = []  # list of frame objects
         self.keyframes = []  # list of pointers to frame objects in self.frames
         self.all_color_diffs = []
@@ -52,48 +39,29 @@ class Frames:
         self.set_difference_thresholds()
         self.set_keyframes()
 
-        if self.verbose:
-            print("motion weight from config:" + str(motion_weight))
-            print("color weight from config:" + str(color_weight))
-            print("motion threshold from config:" + str(motion_threshold))
-            print("color threshold from config:" + str(color_threshold))
-            print("difference properties:")
-            print(self.get_difference_properties())
-            print("keyframe details:")
-            print(self.get_keyframe_details())
-            print("keyframe visualization:")
-            print(self.get_keyframe_vizualization())
-
-        log.write_to_log([
-            "fps:",
-            self.get_fps(),
-            "frame count:",
-            self.get_frame_count(),
-            "motion weight from config:",
-            motion_weight,
-            "color weight from config:",
-            color_weight,
-            "motion threshold from config:",
-            motion_threshold,
-            "color threshold from config:",
-            color_threshold,
-            "keyframe original indices:",
-            self.get_keyframe_original_indices(),
-            "difference properties:",
-            self.get_difference_properties(),
-            "keyframe details:",
-            self.get_keyframe_details(),
-            "keyframe visualization:",
-            self.get_keyframe_vizualization(),
-            "frame objects:",
-            self.get_frame_objects(),
-            "keyframe objects:",
-            self.get_keyframe_objects(),
-        ])
-            
+        self.log.write(
+            [
+                "fps:",
+                self.get_fps(),
+                "frame count:",
+                self.get_frame_count(),
+                "difference properties:",
+                pformat(self.get_difference_properties()),
+                "keyframe details:",
+                pformat(self.get_keyframe_details()),
+                "keyframe original indices:",
+                self.get_keyframe_original_indices(),
+                "\n\nkeyframe visualization:",
+                self.get_keyframe_vizualization(),
+                "\nframe objects:",
+                pformat(self.get_frame_objects()),
+                "keyframe objects:",
+                pformat(self.get_keyframe_objects()),
+            ]
+        )
 
     def get_fps(self):
-        return self.fps 
+        return self.fps
 
     def get_frame_count(self):
         return len(self.frames)
@@ -163,10 +131,10 @@ class Frames:
         # (average diff) -  (minimum diff) * (1 - threshold)
         self.calculated_motion_threshold = (
             self.average_motion_diff - self.min_motion_diff
-        ) * (1 - self.motion_threshold)
+        ) * (1 - self.config.get("keyframe_determination")["motion_threshold"])
         self.calculated_color_threshold = (
             self.average_color_diff - self.min_color_diff
-        ) * (1 - self.color_threshold)
+        ) * (1 - self.config.get("keyframe_determination")["color_threshold"])
         self.combined_threshold = (
             self.calculated_motion_threshold + self.calculated_color_threshold
         )
@@ -186,7 +154,11 @@ class Frames:
                         frame["frame_index_original"]
                     )
                 except IndexError:
-                    print("Frame " + str(frame["frame_index_original"]) + " cannot be assigned a parent keyframe because there are no keyframes yet (i.e., this frame occurs before the first keyframe).")
+                    print(
+                        "Frame "
+                        + str(frame["frame_index_original"])
+                        + " cannot be assigned a parent keyframe because there are no keyframes yet (i.e., this frame occurs before the first keyframe)."
+                    )
 
     def calculate_color_difference(self, frame1, frame2):
         hist1 = cv2.calcHist(
@@ -199,7 +171,7 @@ class Frames:
         return color_diff
 
     def analyze_frames(self):
-        video_capture = cv2.VideoCapture(self.mask_video)
+        video_capture = cv2.VideoCapture(self.config.get("alpha_vid"))
         frame_count = 0
         ret, prev_frame = video_capture.read()
 
@@ -211,20 +183,26 @@ class Frames:
             if not ret:
                 break
 
-            frame_count += 1
             cur_frame = {
                 "frame_index_original": frame_count,
             }
+            frame_count += 1
             if frame_count > 1:
                 gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
                 gray_prev_frame = cv2.cvtColor(prev_frame, cv2.COLOR_BGR2GRAY)
                 motion_diff = cv2.absdiff(gray_frame, gray_prev_frame).sum()
-                motion_diff = motion_diff * self.motion_weight
+                motion_diff = (
+                    motion_diff
+                    * self.config.get("keyframe_determination")["motion_weight"]
+                )
                 self.all_motion_diffs.append(motion_diff)
                 cur_frame["motion_diff"] = motion_diff
 
                 color_diff = self.calculate_color_difference(frame, prev_frame)
-                color_diff = color_diff * self.color_weight
+                color_diff = (
+                    color_diff
+                    * self.config.get("keyframe_determination")["color_weight"]
+                )
                 self.all_color_diffs.append(color_diff)
                 cur_frame["color_diff"] = color_diff
 
@@ -235,19 +213,3 @@ class Frames:
 
         video_capture.release()
         cv2.destroyAllWindows()
-
-
-if __name__ == "__main__":
-    # Example usage:
-    video_file_path = "mask.mp4"
-    differences = Frames(video_file_path)
-
-    # print("get_frame_objects():")
-    # print(differences.get_frame_objects())
-    # print("get_keyframe_objects():")
-    # print(differences.get_keyframe_objects())
-    # print("get_difference_properties():")
-    # print(differences.get_difference_properties())
-
-    print(differences.get_keyframe_details())
-    print(differences.get_keyframe_vizualization())
