@@ -20,6 +20,7 @@
     "frames_composite_selected" : "$project_root$/frames/composite/selected"
   },
   "keyframe_determination" : {
+    "max_keyframe_group_size" : 60,
     "motion_weight" : 0.01,
     "color_weight" : 0.15,
     "motion_threshold" : -0.6,

@@ -2,8 +2,9 @@
 
 Inpaint a video. For example, change an actor's age from old to young or change a person's clothes from lame to stylish -- without changing any other portion of the video. 
 
-## Process
+---
 
+## Process
 
 ### Extract Frames
 - accept (1) a video and (2) the same video but masked for inpainting (3) the masked version but all non-transparent masked regions are turned completely white
@@ -69,27 +70,22 @@ Inpaint a video. For example, change an actor's age from old to young or change 
 ## TODO
 
 ### URGENT
-
-
-- the keyframe analysis should be with the LAST keyframe, not with the frame immediately prior to cur
-- in keyframe algorithm, set max keyframe group size and automatically set new keyframe if exceeding
 - set SD configs
     - ensure composite saving is on
 - auto start SD
 
-
 ### LESS URGENT
-
-
 - prepend CLIP interrogation
 - ID hashes
 - shutil over `cp` shell cmd
 
 ### OPTIONAL FEATURES
-
 - Automate segmentation / Mask creation process (using segmentation AI or using a user-defined block of the image) preceeding rest of process
 - interframe communication
 - OpenCV and FFmpeg are creating slightly different numbers of frames in their respective decoding processes. One solution may be to use the same frame-comparison tools already present in the code to find the correct "shift" to apply to the arrays such that they are matched, and then cut off the trailing/leading frames from the longer array (or just put them in the last/first keyframe groups respectively)
+
+---
+
 
 ## Resources 
 
@@ -110,3 +106,8 @@ Inpaint a video. For example, change an actor's age from old to young or change 
 
 ### Upscaling CLIs/interfaces
 - https://github.com/upscayl/upscayl-ncnn
+
+### Stable Diffusion Interfaces
+- 
+
+### CLIP

@@ -4,21 +4,21 @@ from pprint import pformat
 
 class KeyFrames:
     """
-    This class is responsible for analyzing the frames of the alpha video and determining which frames are keyframes. 
+    This class is responsible for analyzing the frames of the alpha video and determining which frames are keyframes.
     It also stores the keyframes and their children in a list of dictionaries.
 
-    Keyframes are determined by comparing the color and motion differences between frames. 
-    The color difference is calculated by comparing the histograms of the grayscale versions of the frames. 
-    The motion difference is calculated by comparing the grayscale versions of the frames. 
-    
+    Keyframes are determined by comparing the color and motion differences between frames.
+    The color difference is calculated by comparing the histograms of the grayscale versions of the frames.
+    The motion difference is calculated by comparing the grayscale versions of the frames.
+
     The average color and motion differences are calculated and used, along with the user's weights, to determine the thresholds for determining keyframes.
 
     The thresholds are calculated by subtracting the minimum difference from the average difference and multiplying by the threshold weight. The combined threshold is the sum of the motion and color thresholds.
 
     Once the thresholds are calculated, the frames are analyzed again to determine keyframes.
 
-    The first frame is set as a keyframe. Then, the color and motion differences between each frame and the previous KEYFRAME are calculated for each frame. 
-    If the combined difference is greater than the combined threshold, the frame is set as a keyframe. 
+    The first frame is set as a keyframe. Then, the color and motion differences between each frame and the previous KEYFRAME are calculated for each frame.
+    If the combined difference is greater than the combined threshold, the frame is set as a keyframe.
     Otherwise, the frame is set as a child of the previous keyframe.
 
     Weights and thresholds are set in the config.json file.
@@ -104,10 +104,12 @@ class KeyFrames:
             # + 1 to account for the keyframe itself
             "largest keyframe group": max(
                 [len(x["keyframe_children_indices"]) for x in self.keyframes]
-            ) + 1,
+            )
+            + 1,
             "smallest keyframe group": min(
                 [len(x["keyframe_children_indices"]) for x in self.keyframes]
-            ) + 1,
+            )
+            + 1,
         }
 
     def get_keyframe_vizualization(self, line_width=39):
@@ -227,6 +229,7 @@ class KeyFrames:
 
         for frame in self.frames[1:]:
             prev_keyframe = self.keyframes[-1]
+            current_group_size = len(prev_keyframe["keyframe_children_indices"])
 
             gray_frame = cv2.cvtColor(frame["cv2_frame_object"], cv2.COLOR_BGR2GRAY)
             gray_prev_keyframe = cv2.cvtColor(
@@ -248,7 +251,11 @@ class KeyFrames:
 
             frame["keyframe_combined_score"] = motion_diff + color_diff
 
-            if frame["keyframe_combined_score"] > self.combined_threshold:
+            if (
+                frame["keyframe_combined_score"] > self.combined_threshold
+                or current_group_size
+                > self.config.get("keyframe_determination")["max_keyframe_group_size"]
+            ):
                 frame["keyframe"] = True
                 frame["keyframe_children_indices"] = []
                 frame["keyframe_index"] = len(self.keyframes)
