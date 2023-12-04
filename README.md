@@ -1,11 +1,30 @@
 # Morph Frame
 
-Inpaint a video. For example, change an actor's age from old to young or change a person's clothes from lame to stylish -- without changing any other portion of the video. 
+Test project to automate the process of inpainting a video. For example, change an actor's age from old to young or change a person's clothes from lame to stylish -- without changing any other portion of the video.
+
+
+1. segment a video into masked area (area to be inpainted/changed) and non-masked area (area to stay the same)
+1. extract every frame from the original video and the version of the video wherein the non-masked area is made transparent
+1. determine keyframes based on relative motion/color changes in the MASKED AREA 
+2. run diffusion model on alpha layers of keyframes with low denoising 
+1. manually select the best output for each keyframe (assuming multiple batches were run for each keyframe)
+3. composite the selected outputs with the original frames from their associated keyframe-groups
+1. upscale the composite frames with selected upscaling models. Layer multiple upscaling outputs with varying opacity or re-segment and upscale by segment, changing model accordingly
+1. delete any frames with motion or color differences far above average with previous or next frame (which may occur because of bad diffusinon results or oversized keyframe groups). interpolate generated (or simply blended) frames to compensate. not necessary if interframe communication implemented
+1. optionally, user can manually create alpha layers for specific keyframe-groups which had bad results in the automation process and then subsitute them into the provided folders
+1. reconstruct the video with the composite frames, slightly lowering speed and blending frames near keyframes
+1. generate and interpolate frames to improve motion
+1. enhance or filter video
 
 ---
 
-## Process
-
+<details>
+  <summary>
+  
+  ## process
+  
+  </summary>
+  
 ### Extract Frames
 - accept (1) a video and (2) the same video but masked for inpainting (3) the masked version but all non-transparent masked regions are turned completely white
     - If not using auto-segmentation for mask generation, the easiest method is to use some automated motion tracking component of a video editing software
@@ -63,11 +82,16 @@ Inpaint a video. For example, change an actor's age from old to young or change 
 ### Output Package
 - display or point to output video
 - optionally, a comparison grid video is created by placing original, non-upscaled output, and output videos in tiles of a grid
+</details>
 
 
-----
 
-## TODO
+<details>
+  <summary>
+
+  ## todo
+
+  </summary>
 
 ### URGENT
 - set SD configs
@@ -83,11 +107,17 @@ Inpaint a video. For example, change an actor's age from old to young or change 
 - Automate segmentation / Mask creation process (using segmentation AI or using a user-defined block of the image) preceeding rest of process
 - interframe communication
 - OpenCV and FFmpeg are creating slightly different numbers of frames in their respective decoding processes. One solution may be to use the same frame-comparison tools already present in the code to find the correct "shift" to apply to the arrays such that they are matched, and then cut off the trailing/leading frames from the longer array (or just put them in the last/first keyframe groups respectively)
+  
+</details>
 
----
 
 
-## Resources 
+<details>
+  <summary>
+  
+  ## resources
+
+  </summary>
 
 ### Auto-Keyframe Extraction
 - https://github.com/keplerlab/katna
@@ -111,3 +141,9 @@ Inpaint a video. For example, change an actor's age from old to young or change 
 - 
 
 ### CLIP
+
+
+</details>
+
+
+## citation
