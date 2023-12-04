@@ -1,0 +1,64 @@
+
+
+08:56 AM
+Log file for project: deniro-example_project
+Creation date: 04.12.2023
+Project path: /home/bymyself/p/morph-frame/data/projectsdeniro-example_project
+
+08:56 AM
+fps:
+23.976023976023978
+frame count:
+84
+difference properties:
+{'average_color_diff': 749.8968844679893,
+ 'average_motion_diff': 31001.033452380947,
+ 'calculated_color_threshold': 1263.6906416449976,
+ 'calculated_motion_threshold': 35544.69352380951,
+ 'combined_threshold': 36808.38416545451,
+ 'max_color_diff': 4305.687923274457,
+ 'max_motion_diff': 82968.29000000001,
+ 'min_color_diff': 66.82086195717977,
+ 'min_motion_diff': 8785.6}
+keyframe details:
+{'average keyframe group size': 1.9534883720930232,
+ 'largest keyframe group': 5,
+ 'number of keyframes': 43,
+ 'ratio of keyframes to frames': 0.5119047619047619,
+ 'smallest keyframe group': 1}
+
+keyframe original indices:
+[1, 6, 9, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 28, 30, 32, 34, 36, 41, 44, 46, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 60, 65, 69, 74, 77, 82]
+
+
+keyframe visualization:
+_X______________X________X_____X__X__X_
+_X__X_____X__X__X__X__X__X__X__X__X__X_
+____X_____X_____X_____X_____X__________
+____X________X_____X_____X__X__X__X__X_
+_X__X__X__X__X__X_____X______________X_
+__________X______________X________X____
+__________X_______
+
+08:56 AM
+System call:
+ffmpeg -i /home/bymyself/p/morph-frame/data/projects/deniro-example_project/input-videos/background.mp4 -vf fps=23.976023976023978 /home/bymyself/p/morph-frame/data/projects/deniro-example_project/frames/original/background/raw/%d.png
+
+08:56 AM
+Process stdout:
+
+
+08:56 AM
+System call:
+ffmpeg -i /home/bymyself/p/morph-frame/data/projects/deniro-example_project/input-videos/alpha.mp4 -vf fps=23.976023976023978 /home/bymyself/p/morph-frame/data/projects/deniro-example_project/frames/original/alpha/raw/%d.png
+
+08:56 AM
+Process stdout:
+
+
+08:56 AM
+System call:
+ffmpeg -i /home/bymyself/p/morph-frame/data/projects/deniro-example_project/input-videos/alpha_white.mp4 -vf fps=23.976023976023978 /home/bymyself/p/morph-frame/data/projects/deniro-example_project/frames/original/alpha-white_out/%d.png
+
+08:56 AM
+Process stdout:

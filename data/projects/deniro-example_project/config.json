@@ -1,0 +1,70 @@
+{
+    "project_name": "deniro-example_project",
+    "verbose": false,
+    "projects_folder": "/home/bymyself/p/morph-frame/data/projects",
+    "directories": {
+        "log": "/home/bymyself/p/morph-frame/data/projects/deniro-example_project/log",
+        "input_videos": "/home/bymyself/p/morph-frame/data/projects/deniro-example_project/input-videos",
+        "output_videos": "/home/bymyself/p/morph-frame/data/projects/deniro-example_project",
+        "frames_original_background_raw": "/home/bymyself/p/morph-frame/data/projects/deniro-example_project/frames/original/background/raw",
+        "frames_original_background_upscaled": "/home/bymyself/p/morph-frame/data/projects/deniro-example_project/frames/original/background/upscaled",
+        "frames_original_alpha_raw": "/home/bymyself/p/morph-frame/data/projects/deniro-example_project/frames/original/alpha/raw",
+        "frames_original_alpha_upscaled": "/home/bymyself/p/morph-frame/data/projects/deniro-example_project/frames/original/alpha/upscaled",
+        "frames_original_alpha_white_out": "/home/bymyself/p/morph-frame/data/projects/deniro-example_project/frames/original/alpha-white_out",
+        "keyframes_original_background": "/home/bymyself/p/morph-frame/data/projects/deniro-example_project/keyframes/original/background",
+        "keyframes_original_alpha_white_out": "/home/bymyself/p/morph-frame/data/projects/deniro-example_project/keyframes/original/alpha-white_out",
+        "keyframes_composite": "/home/bymyself/p/morph-frame/data/projects/deniro-example_project/keyframes/composite",
+        "frames_composite_all_raw": "/home/bymyself/p/morph-frame/data/projects/deniro-example_project/frames/composite/all/raw",
+        "keyframes_output_alpha": "/home/bymyself/p/morph-frame/data/projects/deniro-example_project/keyframes/output/alpha",
+        "frames_composite_all_upscaled": "/home/bymyself/p/morph-frame/data/projects/deniro-example_project/frames/composite/all/upscaled",
+        "frames_composite_selected": "/home/bymyself/p/morph-frame/data/projects/deniro-example_project/frames/composite/selected"
+    },
+    "keyframe_determination": {
+        "max_keyframe_group_size": 60,
+        "motion_weight": 0.01,
+        "color_weight": 0.15,
+        "motion_threshold": -0.6,
+        "color_threshold": -0.85
+    },
+    "frame_blending": {
+        "tblend": {
+            "blend": "over",
+            "opacity": 1
+        }
+    },
+    "upscaling": {
+        "original": {
+            "enabled": false,
+            "scale": 4.0,
+            "model": "auto"
+        },
+        "output_alpha_channel": {
+            "enabled": false,
+            "scale": 4.0,
+            "model": "auto"
+        },
+        "output_composite": {
+            "enabled": false,
+            "scale": 4.0,
+            "model": "auto"
+        },
+        "video": {
+            "enabled": false,
+            "enhancements": [
+                "upscale",
+                "denoise",
+                "deblock",
+                "sharpen"
+            ],
+            "frame_interpolation": {
+                "enabled": false,
+                "fps_increase": 30,
+                "model": "auto"
+            }
+        }
+    },
+    "outputFPS": "auto",
+    "bg_vid": "/home/bymyself/p/morph-frame/data/projects/deniro-example_project/input-videos/background.mp4",
+    "alpha_vid": "/home/bymyself/p/morph-frame/data/projects/deniro-example_project/input-videos/alpha.mp4",
+    "alpha_white_vid": "/home/bymyself/p/morph-frame/data/projects/deniro-example_project/input-videos/alpha_white.mp4"
+}

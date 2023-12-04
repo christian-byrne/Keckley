@@ -2,7 +2,7 @@ from PIL import Image
 import os
 
 # Folder path containing images
-folder_path = '/home/bymyself/p/morph-frame/data/projects/deniro-goodfellas-v1/frames/original/alpha/raw'  # Replace with your folder path
+folder_path = '/home/bymyself/p/morph-frame/data/projects/deniro-goodfellas-v1/frames/original/alpha-white_out'  # Replace with your folder path
 output_filename = 'deniro-alpha_frames-grid.jpg'  # Output file name
 
 # List all image files in the folder

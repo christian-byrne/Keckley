@@ -29,3 +29,10 @@ __pycache__
 !wiki/*.mp4
 !wiki/*.mkv
 !wiki/*.webm
+!*/projects/deniro-goodfellas-v1
+!*/projects/deniro-goodfellas-v1/*
+!*/projects/*example*  
+*/projects/*example*/*.png  
+*/projects/*example*/*.jpg  
+!tests/sample_videos/deniro-goodfellas/*.mp4
+!*deniro*.in
