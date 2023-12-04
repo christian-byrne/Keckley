@@ -20,3 +20,9 @@ __pycache__
 **.png
 *.png
 *.jpg
+!wiki/*.jpg
+!wiki/*.jpeg
+!wiki/*.png
+!wiki/*.gif
+!wiki/*.mp4
+!wiki/*.avi

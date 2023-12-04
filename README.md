@@ -6,8 +6,8 @@ Test project to automate the process of inpainting a video. For example, change 
 1. segment a video into masked area (area to be inpainted/changed) and non-masked area (area to stay the same) ![pic](wiki/morph-frame-wiki-mask_video_example.mp4)
 
 
-1. extract every frame from the original video and the version of the video wherein the non-masked area is made transparent ![frame grid](./wiki/deniro-frames-grid.jpg) ![alpha-frame grid](./wiki/deniro-alpha_frames-grid.jpg)
-1. determine keyframes based on relative motion/color changes in the MASKED AREA ![keyframe extraction](./wiki/wiki-extract_keyframes.png)
+1. extract every frame from the original video and the version of the video wherein the non-masked area is made transparent ![frame grid](wiki/deniro-frames-grid.jpg) ![alpha-frame grid](wiki/deniro-alpha_frames-grid.jpg)
+1. determine keyframes based on relative motion/color changes in the MASKED AREA ![keyframe extraction](wiki/wiki-extract_keyframes.png)
 2. run diffusion model on alpha layers of keyframes with low denoising 
 1. manually select the best output for each keyframe (assuming multiple batches were run for each keyframe)
 3. composite the selected outputs with the original frames from their associated keyframe-groups
