@@ -26,3 +26,6 @@ __pycache__
 !wiki/*.gif
 !wiki/*.mp4
 !wiki/*.avi
+!wiki/*.mp4
+!wiki/*.mkv
+!wiki/*.webm
