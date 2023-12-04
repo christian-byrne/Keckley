@@ -121,7 +121,7 @@ class KeyFrames:
             else:
                 characters.append("___")
             cur_width += 3
-            if cur_width >= line_width == 0:
+            if cur_width >= line_width:
                 characters.append("\n")
                 cur_width = 0
 
