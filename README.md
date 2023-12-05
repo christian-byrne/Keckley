@@ -1,15 +1,26 @@
-Test project to automate the process of ***inpainting a video***. For example, change an actor's age from old to young or change a person's clothes from lame to stylish — without changing any other portion of the video.
+In progress test project to automate the process of ***inpainting a video*** with pre-trained Stable Diffusion inpainting models. Video inpainting usually refers to the processes of filling in missing or damaged parts of a video, removing objects in a video, or changing the style/appearance of objects in a video (e.g., changing an actor's age from old to young or changing a person's clothes from modern to 19th century).
 
 ![stable diffusion outputs comparison vs. professional VFX](wiki/comparison-SD_vs_professional_VFX.png)
-*first result from SD inpainting (2 mins, 15 steps) vs [$50 million dollar professional VFX company's de-aging done for the movie "The Irishman"](https://youtu.be/OF-lElIlZM0?t=209)*
+
+
+# Video Inpainting
+
+- [A curated list of inpainting papers and resources](https://github.com/zengyh1900/Awesome-Image-Inpainting)
+- [Beyond the Field-of-View: Enhancing Scene Visibility and Perception with Clip-Recurrent Transformer](https://arxiv.org/pdf/2211.11293.pdf)
+- [PyTorch implementation of FlowLens](https://github.com/MasterHow/FlowLens)
+- ["Towards An End-to-End Framework for Flow-Guided Video Inpainting" (CVPR2022)](https://github.com/MCG-NKU/E2FGVI)
+- [[CVPR 2022] Inertia-Guided Flow Completion and Style Fusion for Video Inpainting](https://github.com/hitachinsk/ISVI)
+- [[ECCV 2022] Flow-Guided Transformer for Video Inpainting](https://github.com/hitachinsk/FGT)
+- [[ICCV 2021]: IIVI: Internal Video Inpainting by Implicit Long-range Propagation](https://github.com/Tengfei-Wang/Implicit-Internal-Video-Inpainting)
+- [video-object-removal](https://github.com/zllrunning/video-object-removal)
+- [[ECCV'2020] STTN: Learning Joint Spatial-Temporal Transformations for Video Inpainting](https://github.com/researchmm/STTN)
 
 
 
 # Process
 
-these steps will all be automated
 
-### 1 — Mask/Segment Input Video
+### Mask/Segment Input Video
 
 ![pic](wiki/mask-vid-example.gif)
 
@@ -31,7 +42,7 @@ these steps will all be automated
 
 </details>
 
-### 2 — Extract Frames
+### Extract Frames
 
 
 ![grid demonstrating all the frames in original video](wiki/deniro-frames-grid.jpg) ![grid demonstrating all the frames in the alpha video](wiki/deniro-alpha_frames-grid.jpg) ![grid demonstrating all the frames in the alpha-white video](wiki/deniro-alpha_white_frames-grid.jpg)
@@ -39,7 +50,7 @@ these steps will all be automated
 
 
 
-### 3 — Upscale and Interpolate Frames
+### Upscale and Interpolate Frames
 
 
 <details>
@@ -56,7 +67,7 @@ these steps will all be automated
 
 
 
-### 4 — Determine Keyframes
+### Determine Keyframes
 based on relative motion/color changes in the **alpha frames** (masked area):
 
 ![selecting keyframes from fromes](wiki/wiki-extract_keyframes.png)
@@ -84,7 +95,7 @@ based on relative motion/color changes in the **alpha frames** (masked area):
 </details>
 
 
-### 5 — Inpaint Keyframes
+### Inpaint Keyframes
 with Stable Diffusion (SD) 
 
 ![stable diffusion outputs comparison vs. professional VFX](wiki/comparison-SD_vs_professional_VFX.png)
@@ -101,7 +112,7 @@ with Stable Diffusion (SD)
 
 </details>
 
-### 6 — Select Best Outputs
+### Select Best Outputs
 from each batch (assuming multiple batches were run for each keyframe). E.g., in the above picture, choose between the .3 Denoise and the .37 Denoise outputs
 
 
@@ -115,7 +126,7 @@ from each batch (assuming multiple batches were run for each keyframe). E.g., in
 
 </details>
 
-### 7 — Composite Output Alpha Layers with their Keyframe Groups
+### Composite Output Alpha Layers with their Keyframe Groups
 
 ![demonstration of compositing the SD output alpha-layer keyframes onto the original keyframe groups](wiki/demonstration-keyframe_output_alpha-to-keyframe_group.png)
 
@@ -129,7 +140,7 @@ from each batch (assuming multiple batches were run for each keyframe). E.g., in
 </details>
 
 
-### 8 — Upscale and Correct Composites
+### Upscale and Correct Composites
 
 ![picture demonstrating the upscaling of a composite frame](wiki/demonstration-upscaled_output-R_ESRGAN4x.png)
 
@@ -149,7 +160,7 @@ with selected upscaling models and segmentations
 
 
 
-### 9 — Identify Problematic Keyframe Groups
+### Identify Problematic Keyframe Groups
 by re-running frame analysis to validate that motion and color differences between frames is similar to the original video. 
 
 Delete (or manually re-create) any problematic frames 
@@ -171,7 +182,7 @@ Delete (or manually re-create) any problematic frames
 
 
 
-### 10 — Create Video
+### Create Video
 with the composite frames, slightly lowering speed and blending frames near keyframes
 
 
@@ -189,7 +200,7 @@ with the composite frames, slightly lowering speed and blending frames near keyf
 
 
 
-### 11 — Interpolate Frames
+### Interpolate Frames
 generate and interpolate frames to improve motion (generalized AI video enhancement process)
 
 
@@ -205,7 +216,7 @@ generate and interpolate frames to improve motion (generalized AI video enhancem
 
 
 
-### 12 — Enhance, Filter, Overlay Video
+### Enhance, Filter, Overlay Video
 based on user config
 
 <details>
@@ -226,7 +237,7 @@ based on user config
 </details>
 
 
-### 13 — Package Results
+### Package Results
 including video, path, comparison grid video, log
 
 
@@ -244,6 +255,9 @@ including video, path, comparison grid video, log
     - ensure composite saving is on
 - auto start SD
 - interframe communication
+- propogation
+- joint spatial-temporal transformations
+- intertia guided flow completion
 
 ### LESS URGENT
 - prepend CLIP interrogation
@@ -287,3 +301,7 @@ including video, path, comparison grid video, log
 
 
 </details>
+
+> “None of us are perfect, for which reason we should heed the voice of charity when it whispers in our ears, "Do not magnify the imperfections of others.”
+> 
+> &nbsp; &nbsp; ― Elizabeth Keckley

@@ -36,3 +36,6 @@ __pycache__
 */projects/*example*/*.jpg  
 !tests/sample_videos/deniro-goodfellas/*.mp4
 !*deniro*.in
+*salm*.in
+brand
+brand/*
