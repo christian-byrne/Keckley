@@ -18,7 +18,7 @@ class Blender:
         original_frames = sorted(original_frames, key=lambda x: int(x.split(".")[0]))
 
         for keyframe in self.keyframes:
-            alpha_output_path = f"{self.config.get('directories')['keyframes_output_alpha']}/{keyframe['keyframe_index']}.png"
+            alpha_output_path = f"{self.config.get('directories')['keyframes_output_alpha']}/{keyframe['keyframe_index'] + 1}.png"
             blend_target_indices = keyframe["keyframe_children_indices"]
             blend_target_indices.append(keyframe["frame_index_original"])
             blend_target_indices.sort()

@@ -1,4 +1,4 @@
-In progress test project to automate the process of ***inpainting a video*** with pre-trained Stable Diffusion inpainting models. Video inpainting usually refers to the processes of filling in missing or damaged parts of a video, removing objects in a video, or changing the style/appearance of objects in a video (e.g., changing an actor's age from old to young or changing a person's clothes from modern to 19th century).
+In-progress test project to automate the process of ***inpainting a video*** with pre-trained Stable Diffusion inpainting models. "Inpainting a video" usually refers to the processes of filling in missing or damaged parts of a video, removing objects in a video, or changing the style/appearance of objects in a video (e.g., changing an actor's age from old to young or changing a person's clothes from modern to 19th century). See [examples](https://shangchenzhou.com/projects/ProPainter/) from the video inpainting software [ProPainter by Shangchen Zhou, Chongyi Li, Kelvin C.K. Chan, and Chen Change Loy](https://github.com/sczhou/ProPainter)
 
 ![stable diffusion outputs comparison vs. professional VFX](wiki/comparison-SD_vs_professional_VFX.png)
 
@@ -8,6 +8,7 @@ In progress test project to automate the process of ***inpainting a video*** wit
 - [A curated list of inpainting papers and resources](https://github.com/zengyh1900/Awesome-Image-Inpainting)
 - [Beyond the Field-of-View: Enhancing Scene Visibility and Perception with Clip-Recurrent Transformer](https://arxiv.org/pdf/2211.11293.pdf)
 - [PyTorch implementation of FlowLens](https://github.com/MasterHow/FlowLens)
+- [[ICCV 2023] ProPainter: Improving Propagation and Transformer for Video Inpainting](https://github.com/sczhou/ProPainter)
 - ["Towards An End-to-End Framework for Flow-Guided Video Inpainting" (CVPR2022)](https://github.com/MCG-NKU/E2FGVI)
 - [[CVPR 2022] Inertia-Guided Flow Completion and Style Fusion for Video Inpainting](https://github.com/hitachinsk/ISVI)
 - [[ECCV 2022] Flow-Guided Transformer for Video Inpainting](https://github.com/hitachinsk/FGT)

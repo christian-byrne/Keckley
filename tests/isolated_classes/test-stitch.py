@@ -1,7 +1,7 @@
 import subprocess
 
 
-def stitch_output_frames(fps=10, verbose=True):
+def stitch_output_frames(fps=30, verbose=True):
     """Stitch the output frames together into a video."""
     project_path = input("Enter the path to the image directory: ")
     system_call = f"ffmpeg -r {fps} -i {project_path}/%d.png -vcodec libx264 -crf 10 -pix_fmt yuv420p test_stitch-output.mp4"
@@ -23,4 +23,4 @@ def synchronous_shell_command(command):
 
 
 if __name__ == "__main__":
-    stitch_output_frames(5)
+    stitch_output_frames(24)

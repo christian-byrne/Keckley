@@ -39,3 +39,4 @@ __pycache__
 *salm*.in
 brand
 brand/*
+!data/projects/deniro-example_project/output-fast_processing.mp4
